@@ -1,107 +1,112 @@
 <!doctype HTML>
 <html>
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>PAZIENZA</title>
-<link rel="stylesheet" type="text/css"
-	href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
-<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<style>
-.function {
-	width: 100%;
-}
-</style>
+    <meta charset="utf-8">
+    <title>Linear functions mapper</title>
+    <link rel="stylesheet" type="text/css"
+          href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <style>
+        .function {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-	<form id="breakpoints">
-		<fieldset id="point_1">
-			<legend>Point 1</legend>
-			<input type="number" class="x" /> <input type="number" class="y" />
-		</fieldset>
-		<input id="f1" type="text" class="function" />
-		<fieldset id="point_2">
-			<legend>Point 2</legend>
-			<input type="number" class="x" /> <input type="number" class="y" />
-		</fieldset>
-		<input id="f2" type="text" class="function" />
-		<fieldset id="point_3">
-			<legend>Point 3</legend>
-			<input type="number" class="x" /> <input type="number" class="y" />
-		</fieldset>
-		<input id="f3" type="text" class="function" />
-		<fieldset id="point_4">
-			<legend>Point 4</legend>
-			<input type="number" class="x" /> <input type="number" class="y" />
-		</fieldset>
-	</form>
-	<button id="calculate">Calculate</button>
-	<button id="start">Start</button>
-	<button id="stop">Stop</button>
-	<h1 id="parsed">PARSED VALUE</h1>
-	<h1 id="original">ORIGINAL VALUE</h1>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var going;
-			var limits = [];
-			var functions = [];
-			function readVal() {
-				var number = Math.floor(Math.random() * 1000);
-				var rawcolor = "rgb(1," + (255 - Math.floor(number * 255 / 1000)) + ",1)"
-				var parsed = parse(number);
-				var color = "rgb(1," + parsed + ",1)";
-				console.log(number + " => " + parsed);
-				$('#parsed').css('background-color', color).text(parsed + " -> " + color);
-				$('#original').css('background-color', rawcolor).text(number + " -> " + rawcolor);
-				going = setTimeout(function() {
-					readVal();
-				}, 250);
-			}
-			function parse(n) {
-				for (var i = 0; i < limits.length - 1; i += 1) {
-					if (n >= limits[i])
-						if (n <= limits[i + 1])
-							return Math.floor(functions[i](n));
-				}
-				console.log(n + "NOT IN RANGE");
-				return (0);
-			}
-			$('#start').click(function(evt) {
-				evt.preventDefault();
-				readVal();
-			})
-			$('#stop').click(function(evt) {
-				evt.preventDefault();
-				clearTimeout(going);
-			})
+<form id="breakpoints">
+    <fieldset id="point_1">
+        <legend>Point 1</legend>
+        <input type="number" class="x"/> <input type="number" class="y"/>
+    </fieldset>
+    <input id="f1" type="text" class="function"/>
+    <fieldset id="point_2">
+        <legend>Point 2</legend>
+        <input type="number" class="x"/> <input type="number" class="y"/>
+    </fieldset>
+    <input id="f2" type="text" class="function"/>
+    <fieldset id="point_3">
+        <legend>Point 3</legend>
+        <input type="number" class="x"/> <input type="number" class="y"/>
+    </fieldset>
+    <input id="f3" type="text" class="function"/>
+    <fieldset id="point_4">
+        <legend>Point 4</legend>
+        <input type="number" class="x"/> <input type="number" class="y"/>
+    </fieldset>
+</form>
+<button id="calculate">Calculate</button>
+<button id="start">Start</button>
+<button id="stop">Stop</button>
+<h1 id="parsed">PARSED VALUE</h1>
 
-			$('#calculate').click(function(evt) {
-				evt.preventDefault();
-				var points = [];
-				var previous_point, point;
-				$('#breakpoints > fieldset').each(function(k, v) {
-					point = {
-						value : parseInt($(v).find('input.x').val()),
-						color : parseInt($(v).find('input.y').val())
-					}
-					points.push(point);
-					limits.push(point.value);
-					if (points.length > 1) {
-						m = (previous_point.color - point.color) / (previous_point.value - point.value);
-						q = ((-m * point.value) + point.color);
-						console.log("y = " + m + "x " + ((q > 0) ? "+ " : "- ") + q);
-						$('#f' + k).val("y = " + m + "x " + ((q > 0) ? "+ " : "- ") + q);
-						functions.push((function(m, q) {
-							return (function(x) {
-								return (m * x + q);
-							})
-						})(m, q));
-					}
-					previous_point = point;
-				})
-			})
-		})
-	</script>
+<h1 id="original">ORIGINAL VALUE</h1>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var
+                going,
+                limits = [],
+                functions = [];
+
+        function readVal() {
+            var number = Math.floor(Math.random() * 1000);
+            var rawcolor = "rgb(1," + (255 - Math.floor(number * 255 / 1000)) + ",1)";
+            var parsed = parse(number);
+            var color = "rgb(1," + parsed + ",1)";
+            console.log(number + " => " + parsed);
+            $('#parsed').css('background-color', color).text(parsed + " -> " + color);
+            $('#original').css('background-color', rawcolor).text(number + " -> " + rawcolor);
+            going = setTimeout(function () {
+                readVal();
+            }, 250);
+        }
+
+        function parse(n) {
+            for (var i = 0; i < limits.length - 1; i += 1) {
+                if (n >= limits[i]) {
+                    if (n <= limits[i + 1]) {
+                        return Math.floor(functions[i](n));
+                    }
+                }
+            }
+            console.log(n + "NOT IN RANGE");
+            return (0);
+        }
+
+        $('#start').click(function (evt) {
+            evt.preventDefault();
+            readVal();
+        });
+        $('#stop').click(function (evt) {
+            evt.preventDefault();
+            clearTimeout(going);
+        });
+
+        $('#calculate').click(function (evt) {
+            evt.preventDefault();
+            var m, q, points = [], previous_point, point;
+            $('#breakpoints > fieldset').each(function (k, v) {
+                point = {
+                    value: parseInt($(v).find('input.x').val()),
+                    color: parseInt($(v).find('input.y').val())
+                };
+                points.push(point);
+                limits.push(point.value);
+                if (points.length > 1) {
+                    m = (previous_point.color - point.color) / (previous_point.value - point.value);
+                    q = ((-m * point.value) + point.color);
+                    console.log("y = " + m + "x " + ((q > 0) ? "+ " : "- ") + q);
+                    $('#f' + k).val("y = " + m + "x " + ((q > 0) ? "+ " : "- ") + q);
+                    functions.push((function (m, q) {
+                        return (function (x) {
+                            return (m * x + q);
+                        })
+                    })(m, q));
+                }
+                previous_point = point;
+            })
+        })
+    })
+</script>
 </body>
 </html>
 
